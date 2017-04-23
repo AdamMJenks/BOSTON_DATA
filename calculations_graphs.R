@@ -1,0 +1,18 @@
+### Assumptions that are going to be used:
+# 300 watt solar panel has an average of 20.67 square feet.
+# 
+# Cost is $4.20 cost per watt for MA
+# (http://news.energysage.com/how-much-does-the-average-solar-panel-installation-cost-in-the-u-s/)
+# 
+# 30% ITC federal credit
+# (http://www.seia.org/policy/finance-tax/solar-investment-tax-credit)
+# 
+# 
+# On average we can only use 75% of the top of a building for misc. things like walk ways, ladders, electrical systems.  
+# 
+# BTU to kWH conversion is 1 BTU = 0.00029307107017 kWH
+
+
+# Read and format DFs -----------------------------------------------------
+
+load('data/2016_energy_parsed')
