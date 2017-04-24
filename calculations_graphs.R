@@ -11,6 +11,8 @@
 # On average we can only use 66% of the top of a building for misc. things like walk ways, ladders, electrical systems.  
 # 
 # BTU to kWH conversion is 1 BTU = 0.00029307107017 kWH
+#
+# Assume that of potential sunlight hours, only 75% of them are usable due to weather and other variations.
 
 library(dplyr)
 # Read and format DFs -----------------------------------------------------
@@ -22,7 +24,8 @@ Energy_Parsed_Df$`Total Site Energy (kBTU)` <- as.numeric(Energy_Parsed_Df$`Tota
 Energy_Parsed_Df <-  Energy_Parsed_Df %>%
                       mutate(Available_sqft_for_panels = sqft_available * 0.66,
                              Number_of_300watt_Panels = Available_sqft_for_panels/ 20.67,
-                             Kwh_potential = Number_of_300watt_Panels * 300 * sunlight_hours,
-                             Total_Site_Energy_Kwh = (`Total Site Energy (kBTU)` * 1000) * 0.0002930710717,
-                             Total_Site_Energy_Kwh_Electricity = Total_Site_Energy_Kwh * `% Electricity`)
-                             
+                             Kwh_potential = Number_of_300watt_Panels * 300 * sunlight_hours * 0.75,
+                             Total_Site_Energy_Kwh = (`Total Site Energy (kBTU)` * 1000) * 0.00029307107017,
+                             Total_Site_Energy_Kwh_Electricity = Total_Site_Energy_Kwh * `% Electricity`,
+                             Cost_of_installation_gross = Number_of_300watt_Panels * 300 * 4.20)
+
