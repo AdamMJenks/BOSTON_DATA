@@ -74,9 +74,11 @@ dashboardPage( skin = "green",
       tabItem(tabName = "energy",
               h2("Energy"),
               fluidRow(
-                #selectizeInput('address', 'Address', choices = Energy_Parsed_Df$Address),
-                selectInput('type', label="Property Type", choices = c('All', unique(Energy_Parsed_Df$`Property Type`))),
-                DT::dataTableOutput('energy_table')
+                box (title = 'Maps', width = 12, status = 'success', solidHeader = TRUE,
+                  #selectizeInput('address', 'Address', choices = Energy_Parsed_Df$Address),
+                  selectInput('type', label="Property Type", choices = c('All', unique(Energy_Parsed_Df$`Property Type`))),
+                  DT::dataTableOutput('energy_table')
+                )
               )
       ),
       tabItem(tabName = "savings",
