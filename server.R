@@ -15,11 +15,11 @@ shinyServer(function(input, output) {
    
   getData <- reactive({
     if(input$type != 'All'){
-      e <- subset(Energy_Parsed_Df, `Property Type` == input$type)
-      return(e)
-    } else {
-      return(Energy_Parsed_Df)
+      e <- subset(Energy_Parsed_Df, `Property Type` == input$type & year_built >= input$year)
+    } else{
+      e <- subset(Energy_Parsed_Df, year_built >= input$year)
     }
+    return(e)
   })
     
   

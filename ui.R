@@ -74,9 +74,9 @@ dashboardPage( skin = "green",
       tabItem(tabName = "energy",
               h2("Energy"),
               fluidRow(
-                box (title = 'Maps', width = 12, status = 'success', solidHeader = TRUE,
-                  #selectizeInput('address', 'Address', choices = Energy_Parsed_Df$Address),
-                  selectInput('type', label="Property Type", choices = c('All', unique(Energy_Parsed_Df$`Property Type`))),
+                box(title = 'Energy', width = 12, status = 'success', solidHeader = TRUE,
+                  selectInput('type', label="Property Type", choices = c('All', sort(unique(Energy_Parsed_Df$`Property Type`)))),
+                  numericInput('year', label="Year Built >=", min=min(Energy_Parsed_Df$year_built), max=max(Energy_Parsed_Df$year_built), value = 1950),
                   DT::dataTableOutput('energy_table')
                 )
               )

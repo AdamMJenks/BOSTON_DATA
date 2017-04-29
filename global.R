@@ -12,9 +12,12 @@ lngs <- as.numeric(unlist(lngs))
 
 df_locations<-data.frame(lat=lats, lng=lngs)
 
+Energy_Parsed_Df[which(Energy_Parsed_Df$`Year Built` == '889'),]$`Year Built` <- '1889'
+Energy_Parsed_Df[which(Energy_Parsed_Df$`Year Built` == '1000'),]$`Year Built`  <- '2000'
 Energy_Parsed_Df$`Total Site Energy (kBTU)` <- as.numeric(Energy_Parsed_Df$`Total Site Energy (kBTU)`)
 Energy_Parsed_Df$lat <- lats
 Energy_Parsed_Df$lng <- lngs
+Energy_Parsed_Df$year_built <- as.numeric(Energy_Parsed_Df$`Year Built`)
 
 Energy_Parsed_Df <-  Energy_Parsed_Df %>%
   mutate(Available_sqft_for_panels = sqft_available * 0.66,
