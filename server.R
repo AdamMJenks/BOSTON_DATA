@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(DT)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -19,20 +20,17 @@ shinyServer(function(input, output) {
     } else {
       return(Energy_Parsed_Df)
     }
-    
-    
-    
   })
     
   
-  output$distPlot <- renderPlot({
+  output$energy_table <- renderDataTable({
     
     # generate bins based on input$bins from ui.R
     the_data <- getData()
     
     # draw the histogram with the specified number of bins
-    hist(as.numeric(the_data$`Site EUI (kBTU/sf)`), col = 'darkgray', border = 'white')
+    the_data
     
-  })
+  }, options = list(scrollX = TRUE))
   
 })
