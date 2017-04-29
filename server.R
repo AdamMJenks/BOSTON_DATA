@@ -42,5 +42,25 @@ shinyServer(function(input, output) {
     
   }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
   
+  # output$mymap <- renderLeaflet({
+  #   
+  #   # generate bins based on input$bins from ui.R
+  #   the_data <- getData()
+  #   
+  #   # draw the histogram with the specified number of bins
+  #   the_data
+  #   
+  #   Boston_shape@data = left_join(Boston_shape@data, the_data, by = 'Property_Name')
+  #   
+  #   pal <- colorNumeric("viridis", NULL)
+  #   
+  #   leaflet(Boston_shape) %>%
+  #     addTiles() %>%
+  #     addProviderTiles(providers$CartoDB.Positron) %>%
+  #     addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 1,
+  #                 fillColor = ~pal(Kwh_potential)) %>%
+  #     addLegend(pal = pal, values = ~(Kwh_potential), opacity = 1.0)
+  # })
+  
 })
   
