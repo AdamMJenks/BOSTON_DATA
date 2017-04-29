@@ -1,3 +1,4 @@
+library(leaflet)
 library(shiny)
 library(shinydashboard)
 
@@ -76,7 +77,7 @@ dashboardPage(skin = "green",
               fluidRow(
                 box(title = 'Energy', width = 12, status = 'success', solidHeader = TRUE,
                   selectInput('type', label="Property Type", choices = c('All', sort(unique(Energy_Parsed_Df$`Property Type`)))),
-                  numericInput('year', label="Year Built >=", min=min(Energy_Parsed_Df$year_built), max=max(Energy_Parsed_Df$year_built), value = 1950),
+                  numericInput('year', label="Year Built >=", min=min(Energy_Parsed_Df$year_built), max=max(Energy_Parsed_Df$year_built), value = 1900),
                   DT::dataTableOutput('energy_table')
                 ),
                 leafletOutput("mymap")
