@@ -2,8 +2,19 @@ library(dplyr)
 # Read and format DFs -----------------------------------------------------
 
 load('data/2016_energy_parsed')
+load('data/geocode.Rdata')
+
+geocode_info <- geocode_info[-no_data]
+lats <- lapply(geocode_info, function(x) lapply(x['geometry'], function(y) lapply(y['location'], function(z) z['lat'])))
+lngs <- lapply(geocode_info, function(x) lapply(x['geometry'], function(y) lapply(y['location'], function(z) z['lng'])))
+lats <- as.numeric(unlist(lats))
+lngs <- as.numeric(unlist(lngs))
+
+df_locations<-data.frame(lat=lats, lng=lngs)
 
 Energy_Parsed_Df$`Total Site Energy (kBTU)` <- as.numeric(Energy_Parsed_Df$`Total Site Energy (kBTU)`)
+Energy_Parsed_Df$lat <- lats
+Energy_Parsed_Df$lng <- lngs
 
 Energy_Parsed_Df <-  Energy_Parsed_Df %>%
   mutate(Available_sqft_for_panels = sqft_available * 0.66,
