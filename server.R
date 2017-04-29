@@ -25,7 +25,8 @@ shinyServer(function(input, output) {
     }
     e <- subset(e, select=c(Address, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross))
     e$Cost_of_installation_gross <- formatMoney(e$Cost_of_installation_gross)
-    e <- e %>% datatable() %>%
+    e <- e %>% 
+      datatable() %>%
       formatRound(columns=c('Kwh_potential', 'Cost_of_installation_gross'), digits=0)
     return(e)
   })

@@ -1,14 +1,14 @@
 library(shiny)
 library(shinydashboard)
 
-dashboardPage( skin = "green",
+dashboardPage(skin = "green",
   dashboardHeader(title = "Analyze Boston"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Home", tabName = "dashboard", icon = icon("home")),
       menuItem("Maps", tabName = "maps", icon = icon("map")),
       menuItem("Energy", tabName = "energy", icon = icon("bolt")),
-      menuItem("Savings", tabName = "savings", icon = icon("money"))
+      menuItem("Scenario Planner", tabName = "scenario", icon = icon("money"))
     )
   ),
   dashboardBody(
@@ -81,8 +81,8 @@ dashboardPage( skin = "green",
                 )
               )
       ),
-      tabItem(tabName = "savings",
-        h2("Savings"),
+      tabItem(tabName = "scenario",
+        h2("Scenario Planner"),
         fluidRow(
           # A static infoBox
           infoBox("Taxes", 1 * 2, icon = icon("university")),
@@ -90,7 +90,6 @@ dashboardPage( skin = "green",
           infoBoxOutput("progressBox"),
           infoBoxOutput("approvalBox")
         ),
-        
         # infoBoxes with fill=TRUE
         fluidRow(
           infoBox("Electricity", 10 * 2, icon = icon("bolt"), fill = TRUE),
