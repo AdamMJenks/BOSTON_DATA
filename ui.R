@@ -74,6 +74,7 @@ dashboardPage( skin = "green",
       tabItem(tabName = "energy",
               h2("Energy"),
               fluidRow(
+                selectInput('type', label="Property Type", choices = c('All', unique(Energy_Parsed_Df$`Property Type`))),
                 plotOutput('distPlot')
               )
       ),
