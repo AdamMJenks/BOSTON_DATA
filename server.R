@@ -10,6 +10,10 @@
 library(shiny)
 library(DT)
 
+formatMoney  <- function(x, ...) {
+  paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=","))
+}
+
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
    
@@ -19,6 +23,10 @@ shinyServer(function(input, output) {
     } else{
       e <- subset(Energy_Parsed_Df, year_built >= input$year)
     }
+    e <- subset(e, select=c(Address, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross))
+    e$Cost_of_installation_gross <- formatMoney(e$Cost_of_installation_gross)
+    e <- e %>% datatable() %>%
+      formatRound(columns=c('Kwh_potential', 'Cost_of_installation_gross'), digits=0)
     return(e)
   })
     
@@ -31,6 +39,7 @@ shinyServer(function(input, output) {
     # draw the histogram with the specified number of bins
     the_data
     
-  }, options = list(scrollX = TRUE))
+  }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
   
 })
+  
