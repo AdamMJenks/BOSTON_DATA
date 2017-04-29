@@ -9,7 +9,6 @@ b <- read_excel(path="data/2016-reported-energy-and-water-metrics.xlsx", sheet=1
 load("data/sunroof.Rdata")
 
 ## assume $100/month electric bill
-
 no_data <- which(unlist(lapply(json_list, function(x) length(x[[1]]))) != 8)
 json_list_no_na <- json_list[-no_data]
 
@@ -27,5 +26,4 @@ b$sqft_available <- as.numeric(unlist(sqft_available))
 
 Energy_Parsed_Df <- b
 
-save.image('data/2016_energy_parsed')
-
+save(Energy_Parsed_Df, no_data, file='data/2016_energy_parsed')
