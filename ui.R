@@ -72,7 +72,10 @@ dashboardPage( skin = "green",
               )
       ),
       tabItem(tabName = "energy",
-              h2("Energy")
+              h2("Energy"),
+              fluidRow(
+                plotOutput('distPlot')
+              )
       ),
       tabItem(tabName = "savings",
         h2("Savings"),
