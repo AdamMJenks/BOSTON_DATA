@@ -78,7 +78,8 @@ dashboardPage( skin = "green",
                   selectInput('type', label="Property Type", choices = c('All', sort(unique(Energy_Parsed_Df$`Property Type`)))),
                   numericInput('year', label="Year Built >=", min=min(Energy_Parsed_Df$year_built), max=max(Energy_Parsed_Df$year_built), value = 1950),
                   DT::dataTableOutput('energy_table')
-                )
+                ),
+                leafletOutput("mymap")
               )
       ),
       tabItem(tabName = "savings",
