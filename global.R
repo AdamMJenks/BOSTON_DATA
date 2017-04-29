@@ -8,9 +8,8 @@ load('data/geocode.Rdata')
 load("data/geocode_land.Rdata")
 land_parcels <- read.csv("data/land_parcels.csv")
 
-Boston_shape <- geojsonio::geojson_read("Data/Municipal_Building_Energy_Reporting_BERDO.geojson",
-                                        what = "sp")
-
+load("data/Boston_shape.RData")
+#Boston_shape <- geojsonio::geojson_read("Data/Municipal_Building_Energy_Reporting_BERDO.geojson", what = "sp")
 
 geocode_info <- geocode_info[-no_data]
 lats <- lapply(geocode_info, function(x) lapply(x['geometry'], function(y) lapply(y['location'], function(z) z['lat'])))
@@ -44,17 +43,9 @@ Energy_Parsed_Df <-  Energy_Parsed_Df %>%
                      Total_Site_Energy_Kwh_Electricity = Total_Site_Energy_Kwh * `% Electricity`,
                      Cost_of_installation_gross = Number_of_300watt_Panels * 300 * 4.20,
                      Surplus_energy_production_possible = Kwh_potential - Total_Site_Energy_Kwh_Electricity) %>%
-           rename(Property_Name = `Property Name`)
+  rename(Property_Name = `Property Name`)
 
-  mutate(Available_sqft_for_panels = sqft_available * 0.66,
-         Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
-         Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
-         Total_Site_Energy_Kwh = (`Total Site Energy (kBTU)` * 1000) * 0.00029307107017,
-         Total_Site_Energy_Kwh_Electricity = Total_Site_Energy_Kwh * `% Electricity`,
-         Cost_of_installation_gross = Number_of_300watt_Panels * 300 * 4.20,
-         Surplus_energy_production_possible = Kwh_potential - Total_Site_Energy_Kwh_Electricity) %>%
-         rename(Property_Name = `Property Name`)
-
+ 
 Energy_Surplus_per_property_type <- Energy_Parsed_Df %>% 
   filter(!is.na(Surplus_energy_production_possible)) %>%
   group_by(`Property Type`) %>%
