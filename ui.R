@@ -1,6 +1,7 @@
 library(leaflet)
 library(shiny)
 library(shinydashboard)
+library(shinyWidgets)
 
 dashboardPage(skin = "green",
   dashboardHeader(title = "Analyze Boston"),
@@ -35,6 +36,11 @@ dashboardPage(skin = "green",
       .mapbox {
         min-height: 800px;
         padding: 0;
+      }
+      #prop_types
+      {
+         height: 200px;
+         overflow: auto;
       }
     ')),
     tags$script(src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'),      
@@ -103,19 +109,16 @@ dashboardPage(skin = "green",
       tabItem(tabName = "scenario",
         h2("Scenario Planner"),
         fluidRow(
-          # A static infoBox
-          infoBox("Taxes", 1 * 2, icon = icon("university")),
-          # Dynamic infoBoxes
-          infoBoxOutput("progressBox"),
-          infoBoxOutput("approvalBox")
-        ),
-        # infoBoxes with fill=TRUE
-        fluidRow(
-          infoBox("Electricity", 10 * 2, icon = icon("bolt"), fill = TRUE),
-          infoBoxOutput("progressBox2"),
-          infoBoxOutput("approvalBox2")
+          box(
+              title = 'Input Values For Scenario', width = 12, status = 'success', solidHeader = TRUE,
+              dropdownButton(
+                label = "Choose Property Types", status = "default", width = 460,
+                checkboxGroupInput(inputId = "prop_types", label = "Property Types", choices = unique(Energy_Parsed_Df$`Property Type`))
+                )
+            )
+          )
         )
       )
     )
-  )
+  
 )
