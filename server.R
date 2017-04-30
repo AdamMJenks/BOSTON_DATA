@@ -65,7 +65,7 @@ shinyServer(function(input, output) {
     i <- which(is.na(Boston_shape@data$Kwh_potential))
     Boston_shape <- Boston_shape[-i]
   
-    geojsonio::geojson_write(Boston_shape, file="data.geojson")
+    #geojsonio::geojson_write(Boston_shape, file="data.geojson")
     
     pal <- colorNumeric("viridis", NULL)
 
