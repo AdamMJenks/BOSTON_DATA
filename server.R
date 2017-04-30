@@ -11,18 +11,12 @@ library(shiny)
 library(DT)
 library(plotrix)
 library(rgdal)
+library(shinyWidgets)
 
 formatMoney  <- function(x, ...) {
   paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=","))
 }
 
-spToGeoJSON <- function(sp_obj){
-  temp_file<-tempfile()
-  writeOGR(sp_obj, temp_file,layer = "geojson", driver = "GeoJSON")
-  geojs <- paste(readLines(temp_file), collapse=" ")
-  file.remove(temp_file)
-  return(geojs)
-}
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -55,7 +49,7 @@ shinyServer(function(input, output) {
   }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
   
   output$mymap <- renderLeaflet({
-  
+    
     the_data <- getData()
     Boston_shape@data = left_join(Boston_shape@data, the_data, by = 'Property_Name', copy = TRUE)
     Boston_shape@data$height <- rescale(Boston_shape@data$Kwh_potential, c(0, 400)) 
@@ -64,7 +58,7 @@ shinyServer(function(input, output) {
     Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
     i <- which(is.na(Boston_shape@data$Kwh_potential))
     Boston_shape <- Boston_shape[-i]
-  
+    
     pal <- colorNumeric("viridis", NULL)
 
     leaflet(Boston_shape) %>%
