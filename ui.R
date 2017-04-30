@@ -116,11 +116,8 @@ dashboardPage(skin = "green",
           box(
               title = 'Input Values For Scenario', width = 12, status = 'success', solidHeader = TRUE,
               column(width = 6,
-                  radioButtons('land_building', "Land or Building", choices=c("Buildings", "Land")),
-                  pickerInput(
-                    label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE,
-                    choices = unique(Energy_Parsed_Df$`Property Type`)
-                  ),
+                  radioButtons('land_building', "Which Buildings to Optimize For:", choices=c("Boston Buildings", "BPDA Owned Land", 'Both')),
+                  uiOutput("scenario_lists"),
                   HTML("<br><br>"),
                   numericInput(inputId = "city_bost_perc", label = "Percentage of Electricity to Cover", 
                                min = 0, max = 100, value = 50, width = 250)

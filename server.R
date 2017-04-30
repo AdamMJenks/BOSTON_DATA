@@ -18,25 +18,31 @@ formatMoney  <- function(x, ...) {
   paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=","))
 }
 
-# Define server logic required to draw a histogram
 shinyServer(function(input, output) {
    
   getData <- reactive({
-    if(input$land_building == 'Buildings'){
       if(input$type != 'All'){
         e <- subset(Energy_Parsed_Df, `Property Type` == input$type & year_built >= input$year)
       } else{
         e <- subset(Energy_Parsed_Df, year_built >= input$year)
       }
+      
       e <- subset(e, select=c(Address, Property_Name, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross, lat, lng))
-    } else{
-      e <- land_parsed_df
-    }
 
     
     return(e)
   })
-    
+   
+ 
+  # scenarioData <- reactive({
+  #   
+  #   if(input$land_building == "Boston Buildings"){
+  #     
+  #   }
+  # 
+  #   
+  #   return(e)
+  # })
   
   output$energy_table <- renderDataTable({
     
@@ -49,6 +55,25 @@ shinyServer(function(input, output) {
     
   }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
   
+  output$scenario_lists <- renderUI({
+    if(input$land_building == "Boston Buildings"){
+      pickerInput(
+        label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE,
+        choices = c('All',unique(Energy_Parsed_Df$`Property Type`))
+      )
+    } else if (input$land_building == "BPDA Owned Land"){
+      pickerInput(
+        label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE,
+        choices = c('All',unique(as.character(land_parcels$type)))
+      )
+    } else if (input$land_building == 'Both'){
+      pickerInput(
+        label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE,
+        choices = c('All',unique(land_parcels$type, unique(Energy_Parsed_Df$`Property Type`)))
+      )
+    }
+  })
+  
   output$scenario_table <- renderDataTable({
     
     # generate bins based on input$bins from ui.R
@@ -60,6 +85,7 @@ shinyServer(function(input, output) {
     
   }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
   
+  ### Leaflet map for energy tab
   output$mymap <- renderLeaflet({
  
      #browser()
