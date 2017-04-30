@@ -9,9 +9,19 @@
 
 library(shiny)
 library(DT)
+library(plotrix)
+library(rgdal)
 
 formatMoney  <- function(x, ...) {
   paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=","))
+}
+
+spToGeoJSON <- function(sp_obj){
+  temp_file<-tempfile()
+  writeOGR(sp_obj, temp_file,layer = "geojson", driver = "GeoJSON")
+  geojs <- paste(readLines(temp_file), collapse=" ")
+  file.remove(temp_file)
+  return(geojs)
 }
 
 # Define server logic required to draw a histogram
@@ -23,8 +33,8 @@ shinyServer(function(input, output) {
     } else{
       e <- subset(Energy_Parsed_Df, year_built >= input$year)
     }
-    e <- subset(e, select=c(Address, Property_Name, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross))
-    e$Cost_of_installation_gross <- formatMoney(e$Cost_of_installation_gross)
+    e <- subset(e, select=c(Address, Property_Name, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross, lat, lng))
+    #e$Cost_of_installation_gross <- formatMoney(e$Cost_of_installation_gross)
     
     return(e)
   })
@@ -45,10 +55,21 @@ shinyServer(function(input, output) {
   }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
   
   output$mymap <- renderLeaflet({
-
+  
     the_data <- getData()
     Boston_shape@data = left_join(Boston_shape@data, the_data, by = 'Property_Name', copy = TRUE)
-    Boston_shape <- Boston_shape[-which(is.na(Boston_shape@data$Kwh_potential)),]
+    Boston_shape@data$height <- rescale(Boston_shape@data$Kwh_potential, c(0, 400)) 
+    rbPal <- colorRampPalette(c('green','red'))
+    Boston_shape@data$color <- rbPal(10)[cut(as.numeric(Boston_shape@data$Cost_of_installation_gross),breaks = 10)]
+    Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
+    i <- which(is.na(Boston_shape@data$Kwh_potential))
+    Boston_shape <- Boston_shape[-i]
+    #Boston_shape@plotOrder <- Boston_shape@plotOrder[-i]
+    #Boston_shape@polygons <- Boston_shape@polygons[-i]
+    
+    #writeOGR(Boston_shape, 'test.geojson', layer = "geojson", driver = "GeoJSON")
+    
+    geojsonio::geojson_write(Boston_shape)
     
     pal <- colorNumeric("viridis", NULL)
 

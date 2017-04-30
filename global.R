@@ -4,7 +4,6 @@ library(dplyr)
 load('data/2016_energy_parsed')
 load('data/geocode.Rdata')
 
-
 load("data/geocode_land.Rdata")
 land_parcels <- read.csv("data/land_parcels.csv")
 
