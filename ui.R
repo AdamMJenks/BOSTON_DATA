@@ -116,7 +116,7 @@ dashboardPage(skin = "green",
           box(
               title = 'Input Values For Scenario', width = 12, status = 'success', solidHeader = TRUE,
               column(width = 6,
-                  radioButtons('land_building', "Land or Building", choices=c("Land", "Buildings")),
+                  radioButtons('land_building', "Land or Building", choices=c("Buildings", "Land")),
                   dropdownButton(
                     label = "Choose Property Types", status = "default", width = 460,
                     checkboxGroupInput(inputId = "prop_types", label = "Property Types", choices = unique(Energy_Parsed_Df$`Property Type`))

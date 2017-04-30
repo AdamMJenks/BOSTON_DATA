@@ -12,6 +12,7 @@ library(DT)
 library(plotrix)
 library(rgdal)
 library(shinyWidgets)
+library(spatialEco)
 
 formatMoney  <- function(x, ...) {
   paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=","))
@@ -60,16 +61,25 @@ shinyServer(function(input, output) {
   }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
   
   output$mymap <- renderLeaflet({
-    
-    the_data <- getData()
-    Boston_shape@data = left_join(Boston_shape@data, the_data, by = 'Property_Name', copy = TRUE)
-    Boston_shape@data$height <- rescale(Boston_shape@data$Kwh_potential, c(0, 400)) 
-    rbPal <- colorRampPalette(c('green','red'))
-    Boston_shape@data$color <- rbPal(10)[cut(as.numeric(Boston_shape@data$Cost_of_installation_gross),breaks = 10)]
-    Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
-    i <- which(is.na(Boston_shape@data$Kwh_potential))
-    Boston_shape <- Boston_shape[-i]
-    
+# 
+#     browser()
+#     the_data <- getData()
+#      Boston_shape@data = data.frame(Boston_shape@data, the_data[match(Boston_shape@data$Property_Name, the_data$Property_Name),])
+#      
+#      rbPal <- colorRampPalette(c('green','red'))
+#      Boston_shape@data$score <- as.numeric(Boston_shape@data$Cost_of_installation_gross) / Boston_shape@data$Kwh_potential
+#      Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
+#      Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
+#      ## Remove some outliers
+#      Boston_shape@data$score [which(Boston_shape@data$score > 30)] <- NA
+#      Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
+#      Boston_shape@data$height <-Boston_shape@data$score
+#      Boston_shape@data$color <- rbPal(10)[cut(as.numeric(Boston_shape@data$score),breaks = 10)]
+# 
+#      Boston_shape <- sp.na.omit(Boston_shape, 'score')
+# 
+#      geojsonio::geojson_write(Boston_shape, file="www/data.geojson")
+
     pal <- colorNumeric("viridis", NULL)
 
     leaflet(Boston_shape) %>%
