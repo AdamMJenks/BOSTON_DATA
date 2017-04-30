@@ -116,6 +116,7 @@ dashboardPage(skin = "green",
           box(
               title = 'Input Values For Scenario', width = 12, status = 'success', solidHeader = TRUE,
               column(width = 6,
+                  radioButtons('land_building', "Land or Building", choices=c("Land", "Buildings")),
                   dropdownButton(
                     label = "Choose Property Types", status = "default", width = 460,
                     checkboxGroupInput(inputId = "prop_types", label = "Property Types", choices = unique(Energy_Parsed_Df$`Property Type`))
@@ -128,7 +129,8 @@ dashboardPage(skin = "green",
                   numericInput(inputId = 'perc_roof_used', label = 'Percentage Roof Usable',
                                min = 0, max = 100, value = 66, width = 250),
                   HTML("<br>")
-                  )
+                  ),
+              DT::dataTableOutput('scenario_table')
               )
             )
           )

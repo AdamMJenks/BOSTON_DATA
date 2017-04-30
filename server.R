@@ -17,17 +17,20 @@ formatMoney  <- function(x, ...) {
   paste0("$", formatC(as.numeric(x), format="f", digits=2, big.mark=","))
 }
 
-
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
    
   getData <- reactive({
-    if(input$type != 'All'){
-      e <- subset(Energy_Parsed_Df, `Property Type` == input$type & year_built >= input$year)
+    if(input$land_building == 'Buildings'){
+      if(input$type != 'All'){
+        e <- subset(Energy_Parsed_Df, `Property Type` == input$type & year_built >= input$year)
+      } else{
+        e <- subset(Energy_Parsed_Df, year_built >= input$year)
+      }
+      e <- subset(e, select=c(Address, Property_Name, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross, lat, lng))
     } else{
-      e <- subset(Energy_Parsed_Df, year_built >= input$year)
+      e <- land_parsed_df
     }
-    e <- subset(e, select=c(Address, Property_Name, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross, lat, lng))
     #e$Cost_of_installation_gross <- formatMoney(e$Cost_of_installation_gross)
     
     return(e)
@@ -39,8 +42,16 @@ shinyServer(function(input, output) {
     # generate bins based on input$bins from ui.R
     the_data <- getData()
     
-    # draw the histogram with the specified number of bins
-    the_data
+    the_data <- the_data %>% 
+      datatable() %>%
+      formatRound(columns=c('Kwh_potential', 'Cost_of_installation_gross'), digits=0)
+    
+  }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
+  
+  output$scenario_table <- renderDataTable({
+    
+    # generate bins based on input$bins from ui.R
+    the_data <- getData()
     
     the_data <- the_data %>% 
       datatable() %>%
