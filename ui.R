@@ -119,15 +119,19 @@ dashboardPage(skin = "green",
                     label = "Choose Property Types", status = "default", width = 460,
                     checkboxGroupInput(inputId = "prop_types", label = "Property Types", choices = unique(Energy_Parsed_Df$`Property Type`))
                     ),
-                  HTML("<br>"),
+                  HTML("<br><br>"),
                   numericInput(inputId = "city_bost_perc", label = "Percentage of Electricity to Cover", 
                                min = 0, max = 100, value = 50, width = 250)
               ),
-              column(width = 6)
+              column(width = 6,
+                  numericInput(inputId = 'perc_roof_used', label = 'Percentage Roof Usable',
+                               min = 0, max = 100, value = 66, width = 250),
+                  HTML("<br>")
+                  )
+              )
             )
           )
         )
       )
     )
   
-)
