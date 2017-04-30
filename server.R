@@ -32,7 +32,7 @@ shinyServer(function(input, output) {
     } else{
       e <- land_parsed_df
     }
-    #e$Cost_of_installation_gross <- formatMoney(e$Cost_of_installation_gross)
+
     
     return(e)
   })
@@ -61,21 +61,21 @@ shinyServer(function(input, output) {
   }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
   
   output$mymap <- renderLeaflet({
-# 
-    #browser()
+ 
+     #browser()
     
     the_data <- getData()
      Boston_shape@data = data.frame(Boston_shape@data, the_data[match(Boston_shape@data$Property_Name, the_data$Property_Name),])
 
-     #rbPal <- colorRampPalette(c('green','red'))
-     #Boston_shape@data$score <- as.numeric(Boston_shape@data$Cost_of_installation_gross) / Boston_shape@data$Kwh_potential
-     #Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
-     #Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
+     rbPal <- colorRampPalette(c('green','red'))
+     Boston_shape@data$score <- as.numeric(Boston_shape@data$Cost_of_installation_gross) / Boston_shape@data$Kwh_potential
+     Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
+     Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
      ## Remove some outliers
-     #Boston_shape@data$score [which(Boston_shape@data$score > 30)] <- NA
-     #Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
-     #Boston_shape@data$height <-Boston_shape@data$score
-     #Boston_shape@data$color <- rbPal(10)[cut(as.numeric(Boston_shape@data$score),breaks = 10)]
+     Boston_shape@data$score [which(Boston_shape@data$score > 30)] <- NA
+     Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
+     Boston_shape@data$height <-Boston_shape@data$score
+     Boston_shape@data$color <- rbPal(10)[cut(as.numeric(Boston_shape@data$score),breaks = 10)]
 
      Boston_shape <- sp.na.omit(Boston_shape, 'Kwh_potential')
 
