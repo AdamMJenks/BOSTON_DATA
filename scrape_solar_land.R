@@ -43,7 +43,7 @@ for(j in 1:nrow(df_locations)){
 }
 
 
-save(geocode_info, file="data/geocode_land.Rdata")
+save(geocode_info_land, file="data/geocode_land.Rdata")
 save(json_list, file="data/sunroof_land.Rdata")
 
 # 
