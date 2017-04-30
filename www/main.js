@@ -43,7 +43,7 @@ window.onload = function () {
               // Geojson Data source used in vector tiles, documented at
               // https://gist.github.com/ryanbaumann/a7d970386ce59d11c16278b90dde094d
               'type': 'geojson',
-              'data': 'boston.geojson'
+              'data': 'data.geojson'
           },
           'paint': {
               // See the Mapbox Style Spec for details on property functions

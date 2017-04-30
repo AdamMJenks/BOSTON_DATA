@@ -83,10 +83,10 @@ dashboardPage(skin = "green",
               fluidRow(
                 box (title = 'Maps', width = 12, class="mapbox", status = 'success', solidHeader = TRUE,
                   div(id = "map")
-                )
-                box (title = 'Maps', width = 12, status = 'success', solidHeader = TRUE
-                  #tags$iframe(src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d94411.77160300482!2d-71.1273685766368!3d42.31335203482073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e3652d0d3d311b%3A0x787cbf240162e8a0!2sBoston%2C+MA!5e0!3m2!1sen!2sus!4v1492800915327", width="100%", height="800", frameborder="0", style="border:0")    
                 ),
+                #box (title = 'Maps', width = 12, status = 'success', solidHeader = TRUE
+                  #tags$iframe(src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d94411.77160300482!2d-71.1273685766368!3d42.31335203482073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e3652d0d3d311b%3A0x787cbf240162e8a0!2sBoston%2C+MA!5e0!3m2!1sen!2sus!4v1492800915327", width="100%", height="800", frameborder="0", style="border:0")    
+                #),
                 leafletOutput("mymap")
               )
       ),
