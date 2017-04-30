@@ -1,19 +1,22 @@
 library(leaflet)
 library(shiny)
 library(shinydashboard)
+library(shinyWidgets)
 
 dashboardPage(skin = "green",
   dashboardHeader(title = "Analyze Boston"),
   dashboardSidebar(
     sidebarMenu(
       menuItem("Home", tabName = "dashboard", icon = icon("home")),
-      menuItem("Maps", tabName = "maps", icon = icon("map")),
-      menuItem("Energy", tabName = "energy", icon = icon("bolt")),
+      menuItem("Energy Skyline", tabName = "maps", icon = icon("map")),
+      menuItem("Boston Explorer", tabName = "energy", icon = icon("bolt")),
       menuItem("Scenario Planner", tabName = "scenario", icon = icon("money"))
     )
   ),
   dashboardBody(
-    tags$head(tags$style(HTML('
+    tags$head(
+    tags$link(href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css"),
+    tags$style(HTML('
       .logo {
         display: block;
         margin: 0 auto;
@@ -25,7 +28,24 @@ dashboardPage(skin = "green",
         display: inline-block;
         margin: 0 20px;
       }
-    '))),
+      #map,
+      .mapboxgl-canvas { 
+        width:100% !important;
+        min-height: 800px;
+      }
+      .mapbox {
+        min-height: 800px;
+        padding: 0;
+      }
+      #prop_types
+      {
+         height: 200px;
+         overflow: auto;
+      }
+    ')),
+    tags$script(src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'),      
+    tags$script(src='main.js')
+    ),
     tabItems(
       # First tab content
       tabItem(tabName = "dashboard",
@@ -67,10 +87,12 @@ dashboardPage(skin = "green",
       # Second tab content
       tabItem(tabName = "maps",
               fluidRow(
-                box (title = 'Maps', width = 12, status = 'success', solidHeader = TRUE
+                box (title = 'Maps', width = 12, class="mapbox", status = 'success', solidHeader = TRUE,
+                  div(id = "map")
+                )
+                #box (title = 'Maps', width = 12, status = 'success', solidHeader = TRUE
                   #tags$iframe(src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d94411.77160300482!2d-71.1273685766368!3d42.31335203482073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e3652d0d3d311b%3A0x787cbf240162e8a0!2sBoston%2C+MA!5e0!3m2!1sen!2sus!4v1492800915327", width="100%", height="800", frameborder="0", style="border:0")    
-                ),
-                leafletOutput("mymap")
+                #),
               )
       ),
       tabItem(tabName = "energy",
@@ -79,26 +101,37 @@ dashboardPage(skin = "green",
                 box(title = 'Energy', width = 12, status = 'success', solidHeader = TRUE,
                   selectInput('type', label="Property Type", choices = c('All', sort(unique(Energy_Parsed_Df$`Property Type`)))),
                   numericInput('year', label="Year Built >=", min=min(Energy_Parsed_Df$year_built), max=max(Energy_Parsed_Df$year_built), value = 1900),
-                  DT::dataTableOutput('energy_table')
+                  
+                  tabsetPanel(
+                    tabPanel('Table', DT::dataTableOutput('energy_table')),
+                    tabPanel('City Map',leafletOutput("mymap"))
+                  )
                 )
               )
       ),
       tabItem(tabName = "scenario",
         h2("Scenario Planner"),
         fluidRow(
-          # A static infoBox
-          infoBox("Taxes", 1 * 2, icon = icon("university")),
-          # Dynamic infoBoxes
-          infoBoxOutput("progressBox"),
-          infoBoxOutput("approvalBox")
-        ),
-        # infoBoxes with fill=TRUE
-        fluidRow(
-          infoBox("Electricity", 10 * 2, icon = icon("bolt"), fill = TRUE),
-          infoBoxOutput("progressBox2"),
-          infoBoxOutput("approvalBox2")
+          box(
+              title = 'Input Values For Scenario', width = 12, status = 'success', solidHeader = TRUE,
+              column(width = 6,
+                  dropdownButton(
+                    label = "Choose Property Types", status = "default", width = 460,
+                    checkboxGroupInput(inputId = "prop_types", label = "Property Types", choices = unique(Energy_Parsed_Df$`Property Type`))
+                    ),
+                  HTML("<br><br>"),
+                  numericInput(inputId = "city_bost_perc", label = "Percentage of Electricity to Cover", 
+                               min = 0, max = 100, value = 50, width = 250)
+              ),
+              column(width = 6,
+                  numericInput(inputId = 'perc_roof_used', label = 'Percentage Roof Usable',
+                               min = 0, max = 100, value = 66, width = 250),
+                  HTML("<br>")
+                  )
+              )
+            )
+          )
         )
       )
     )
-  )
-)
+  
