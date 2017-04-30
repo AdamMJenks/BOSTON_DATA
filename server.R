@@ -64,12 +64,8 @@ shinyServer(function(input, output) {
     Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
     i <- which(is.na(Boston_shape@data$Kwh_potential))
     Boston_shape <- Boston_shape[-i]
-    #Boston_shape@plotOrder <- Boston_shape@plotOrder[-i]
-    #Boston_shape@polygons <- Boston_shape@polygons[-i]
-    
-    #writeOGR(Boston_shape, 'test.geojson', layer = "geojson", driver = "GeoJSON")
-    
-    geojsonio::geojson_write(Boston_shape)
+  
+    geojsonio::geojson_write(Boston_shape, file="data.geojson")
     
     pal <- colorNumeric("viridis", NULL)
 
