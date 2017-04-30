@@ -136,7 +136,12 @@ dashboardPage(skin = "green",
               tabsetPanel(
                 tabPanel('Overview'
                          ),
-                tabPanel('Results'),
+                tabPanel('Results',
+                             infoBoxOutput("energy_requested"),
+                             infoBoxOutput("produced_by_selection"),
+                             infoBoxOutput("percentage_covered"),
+                             infoBoxOutput("cost_of_implementation")
+                         ),
                 tabPanel('Scenario Selected From:',DT::dataTableOutput('scenario_table'))
               )
             )

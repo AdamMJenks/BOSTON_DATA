@@ -49,12 +49,12 @@ shinyServer(function(input, output) {
     if(input$land_building == "Boston Buildings"){
       pickerInput(
         label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE, selected = 'Boston All',
-        choices = c('All',unique(Energy_Parsed_Df$`Property Type`))
+        choices = c('Boston All',unique(Energy_Parsed_Df$`Property Type`))
       )
     } else if (input$land_building == "BPDA Owned Land"){
       pickerInput(
         label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE, selected = 'BPDA All',
-        choices = c('All',unique(as.character(land_parcels$type)))
+        choices = c('BPDA All',unique(as.character(land_parcels$type)))
       )
     } else if (input$land_building == 'Both'){
       pickerInput(
@@ -109,8 +109,9 @@ shinyServer(function(input, output) {
   
   ### Scenario action button and compute
   observeEvent(input$compute_button, {
+    
     if(input$land_building == "Boston Buildings"){
-      if(input$prop_types == 'All'){
+      if('Boston All' %in% input$prop_types){
         calculate_df <- Energy_Parsed_Df %>% 
                                 dplyr::select(Property_Name, `Property Type`, Address, Total_Site_Energy_Kwh, 
                                        sqft_available, sunlight_hours) %>%
@@ -118,6 +119,19 @@ shinyServer(function(input, output) {
                                        Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
                                        Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
                                        Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+        
+        output$energy_requested <- renderInfoBox({
+          infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+          })
+        output$produced_by_selection <- renderInfoBox({
+          infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+          })
+        output$percentage_covered <- renderInfoBox({
+          infoBox("Percent Covered", ((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+          })
+        output$cost_of_implementation <- renderInfoBox({
+          infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+          })
         
       } else {
       
@@ -129,16 +143,44 @@ shinyServer(function(input, output) {
                                         Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
                                         Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
                                         Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+        
+        output$energy_requested <- renderInfoBox({
+          infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+        })
+        output$produced_by_selection <- renderInfoBox({
+          infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+        })
+        output$percentage_covered <- renderInfoBox({
+          infoBox("Percent Covered", ((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+        })
+        output$cost_of_implementation <- renderInfoBox({
+          infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+        })
+        
 
     }
   } else if (input$land_building == "BPDA Owned Land"){
-    if(input$prop_types == 'All'){
+    if('BPDA All' %in% input$prop_types){
       calculate_df <- land_parsed_df %>%
                                 dplyr::select(address, neighborhood, type, sunlight_hours, sqft_available) %>%
                                 mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
                                        Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
                                        Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
                                        Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+      
+      output$energy_requested <- renderInfoBox({
+        infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+      })
+      output$produced_by_selection <- renderInfoBox({
+        infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+      })
+      output$percentage_covered <- renderInfoBox({
+        infoBox("Percent Covered", ((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+      })
+      output$cost_of_implementation <- renderInfoBox({
+        infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+      })
+      
     } else {
       calculate_df <- land_parsed_df %>%
                                 dplyr::select(address, neighborhood, type, sunlight_hours, sqft_available) %>%
@@ -147,13 +189,116 @@ shinyServer(function(input, output) {
                                        Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
                                        Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
                                        Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+      
+      output$energy_requested <- renderInfoBox({
+        infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+      })
+      output$produced_by_selection <- renderInfoBox({
+        infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+      })
+      output$percentage_covered <- renderInfoBox({
+        infoBox("Percent Covered", ((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+      })
+      output$cost_of_implementation <- renderInfoBox({
+        infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+      })
+      
     }
    } else if (input$land_building == 'Both'){
-  # }
-    }   
-  output$scenario_table <- renderDataTable({
-      calculate_df
-  }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
+     if('All' %in% input$prop_types){
+       calculate_df <- Energy_Parsed_Df %>% 
+                             dplyr::select(Property_Name, `Property Type`, Address, Total_Site_Energy_Kwh, 
+                                           sqft_available, sunlight_hours) %>%
+                             mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                    Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                    Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                    Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+       
+       bpda_calculate_df <- land_parsed_df %>%
+                             dplyr::select(address, neighborhood, type, sunlight_hours, sqft_available) %>%
+                             mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                    Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                    Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                    Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+       
+       output$energy_requested <- renderInfoBox({
+         infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+       })
+       output$produced_by_selection <- renderInfoBox({
+         infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+       })
+       output$percentage_covered <- renderInfoBox({
+         infoBox("Percent Covered", (((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+       })
+       output$cost_of_implementation <- renderInfoBox({
+         infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+       })
+       
+     } else if ('BPDA All' %in% input$prop_types){
+       calculate_df <- Energy_Parsed_Df %>%
+                               dplyr::select(Property_Name, `Property Type`, Address, Total_Site_Energy_Kwh, 
+                                             sqft_available, sunlight_hours) %>%
+                               subset(`Property Type` %in% input$prop_types) %>%
+                               mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                      Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                      Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                      Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+       
+       bpda_calculate_df <- land_parsed_df %>%
+                             dplyr::select(address, neighborhood, type, sunlight_hours, sqft_available) %>%
+                             mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                    Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                    Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                    Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+       
+       output$energy_requested <- renderInfoBox({
+         infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+       })
+       output$produced_by_selection <- renderInfoBox({
+         infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+       })
+       output$percentage_covered <- renderInfoBox({
+         infoBox("Percent Covered", (((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+       })
+       output$cost_of_implementation <- renderInfoBox({
+         infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+       })
+       
+     } else if ('Boston All' %in% input$prop_types){
+       calculate_df <- Energy_Parsed_Df %>% 
+                                 dplyr::select(Property_Name, `Property Type`, Address, Total_Site_Energy_Kwh, 
+                                               sqft_available, sunlight_hours) %>%
+                                 mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                        Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                        Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                        Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+       
+       bpda_calculate_df <- land_parsed_df %>%
+                                 dplyr::select(address, neighborhood, type, sunlight_hours, sqft_available) %>%
+                                 subset(type %in% input$prop_types) %>%
+                                 mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                        Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                        Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                        Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+       
+       output$energy_requested <- renderInfoBox({
+         infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+       })
+       output$produced_by_selection <- renderInfoBox({
+         infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+       })
+       output$percentage_covered <- renderInfoBox({
+         infoBox("Percent Covered", (((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+       })
+       output$cost_of_implementation <- renderInfoBox({
+         infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+       })
+     }
+   }
+    
+    output$scenario_table <- renderDataTable({
+        calculate_df
+    }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
     
   })
   

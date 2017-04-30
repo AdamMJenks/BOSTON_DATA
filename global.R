@@ -47,6 +47,8 @@ Energy_Parsed_Df <-  Energy_Parsed_Df %>%
                      Surplus_energy_production_possible = Kwh_potential - Total_Site_Energy_Kwh_Electricity) %>%
   rename(Property_Name = `Property Name`)
 
+Total_energy_city_of_boston <<- sum(Energy_Parsed_Df$Total_Site_Energy_Kwh_Electricity, na.rm = T)
+
  
 Energy_Surplus_per_property_type <- Energy_Parsed_Df %>% 
   filter(!is.na(Surplus_energy_production_possible)) %>%
