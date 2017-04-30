@@ -13,7 +13,7 @@ window.onload = function () {
   map.on('load', function() {
       map.loadImage('img/logo.png', (error, image) => {
         if (error) throw error;
-        map.addImage('logo', image);
+        map.addImage('tcb', image);
         map.addLayer({
             "id": "points",
             "type": "symbol",
@@ -31,7 +31,7 @@ window.onload = function () {
                 }
             },
             "layout": {
-                "icon-image": "logo",
+                "icon-image": "tcb",
                 "icon-size": 0.5
             }
         });
