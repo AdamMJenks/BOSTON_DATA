@@ -9,6 +9,7 @@
 
 library(shiny)
 library(DT)
+library(dplyr)
 library(plotrix)
 library(rgdal)
 library(shinyWidgets)
@@ -47,18 +48,18 @@ shinyServer(function(input, output) {
   output$scenario_lists <- renderUI({
     if(input$land_building == "Boston Buildings"){
       pickerInput(
-        label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE,
+        label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE, selected = 'Boston All',
         choices = c('All',unique(Energy_Parsed_Df$`Property Type`))
       )
     } else if (input$land_building == "BPDA Owned Land"){
       pickerInput(
-        label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE,
+        label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE, selected = 'BPDA All',
         choices = c('All',unique(as.character(land_parcels$type)))
       )
     } else if (input$land_building == 'Both'){
       pickerInput(
-        label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE,
-        choices = c('All',unique(land_parcels$type, unique(Energy_Parsed_Df$`Property Type`)))
+        label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE, selected = 'All',
+        choices = c('All','Boston All', 'BPDA All',unique(land_parcels$type, unique(Energy_Parsed_Df$`Property Type`)))
       )
     }
   })
@@ -110,17 +111,50 @@ shinyServer(function(input, output) {
   observeEvent(input$compute_button, {
     if(input$land_building == "Boston Buildings"){
       if(input$prop_types == 'All'){
-        calculate_df <- Energy_Parsed_Df %>% subset()
-      } else {
-        calculate_df <- Energy_Parsed_Df %>% subset(`Property Type` %in% input$prop_types)
+        calculate_df <- Energy_Parsed_Df %>% 
+                                dplyr::select(Property_Name, `Property Type`, Address, Total_Site_Energy_Kwh, 
+                                       sqft_available, sunlight_hours) %>%
+                                mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                       Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                       Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                       Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
         
-      output$scenario_table <- renderDataTable({
-        calculate_df
-      }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
-    
-      } else if (input$land_building == "BPDA Owned Land"){
-    } else if (input$land_building == 'Both'){
+      } else {
+      
+        calculate_df <- Energy_Parsed_Df %>%
+                                 dplyr::select(Property_Name, `Property Type`, Address, Total_Site_Energy_Kwh, 
+                                               sqft_available, sunlight_hours) %>%
+                                 subset(`Property Type` %in% input$prop_types) %>%
+                                 mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                        Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                        Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                        Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+
     }
+  } else if (input$land_building == "BPDA Owned Land"){
+    if(input$prop_types == 'All'){
+      calculate_df <- land_parsed_df %>%
+                                dplyr::select(address, neighborhood, type, sunlight_hours, sqft_available) %>%
+                                mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                       Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                       Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                       Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+    } else {
+      calculate_df <- land_parsed_df %>%
+                                dplyr::select(address, neighborhood, type, sunlight_hours, sqft_available) %>%
+                                subset(type %in% input$prop_types) %>%
+                                mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                       Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                       Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                       Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+    }
+   } else if (input$land_building == 'Both'){
+  # }
+    }   
+  output$scenario_table <- renderDataTable({
+      calculate_df
+  }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
+    
   })
   
 })
