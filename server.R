@@ -32,17 +32,6 @@ shinyServer(function(input, output) {
     
     return(e)
   })
-   
- 
-  # scenarioData <- reactive({
-  #   
-  #   if(input$land_building == "Boston Buildings"){
-  #     
-  #   }
-  # 
-  #   
-  #   return(e)
-  # })
   
   output$energy_table <- renderDataTable({
     
@@ -115,6 +104,23 @@ shinyServer(function(input, output) {
       addPolygons(stroke = FALSE, smoothFactor = 0.3, fillOpacity = 1,
                   fillColor = ~pal(Kwh_potential)) %>%
       addLegend(pal = pal, values = ~(Kwh_potential), opacity = 1.0)
+  })
+  
+  ### Scenario action button and compute
+  observeEvent(input$compute_button, {
+    if(input$land_building == "Boston Buildings"){
+      if(input$prop_types == 'All'){
+        calculate_df <- Energy_Parsed_Df %>% subset()
+      } else {
+        calculate_df <- Energy_Parsed_Df %>% subset(`Property Type` %in% input$prop_types)
+        
+      output$scenario_table <- renderDataTable({
+        calculate_df
+      }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
+    
+      } else if (input$land_building == "BPDA Owned Land"){
+    } else if (input$land_building == 'Both'){
+    }
   })
   
 })

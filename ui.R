@@ -41,6 +41,7 @@ dashboardPage(skin = "green",
       {
          height: 200px;
          overflow: auto;
+         width: 200px;
       }
     ')),
     tags$script(src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'),      
@@ -117,21 +118,31 @@ dashboardPage(skin = "green",
               title = 'Input Values For Scenario', width = 12, status = 'success', solidHeader = TRUE,
               column(width = 6,
                   radioButtons('land_building', "Which Buildings to Optimize For:", choices=c("Boston Buildings", "BPDA Owned Land", 'Both')),
-                  uiOutput("scenario_lists"),
-                  HTML("<br><br>"),
-                  numericInput(inputId = "city_bost_perc", label = "Percentage of Electricity to Cover", 
-                               min = 0, max = 100, value = 50, width = 250)
+                  uiOutput("scenario_lists")
+                  
               ),
               column(width = 6,
                   numericInput(inputId = 'perc_roof_used', label = 'Percentage Roof Usable',
                                min = 0, max = 100, value = 66, width = 250),
-                  HTML("<br>")
+                  numericInput(inputId = "city_bost_perc", label = "Percentage of Electricity to Cover", 
+                               min = 0, max = 100, value = 50, width = 250),
+                  numericInput(inputId = "price_p_watt", label = 'Price per watt ($)',
+                               min = 0, max = 5, value = 4.20, width = 250)
                   ),
-              DT::dataTableOutput('scenario_table')
+              fluidRow(
+                column(width = 4),
+                column(width = 4, actionButton("compute_button", "Compute Scenario!"))
+              ),
+              tabsetPanel(
+                tabPanel('Overview'
+                         ),
+                tabPanel('Results'),
+                tabPanel('Scenario Selected From:',DT::dataTableOutput('scenario_table'))
               )
             )
           )
         )
       )
     )
+  )
   
