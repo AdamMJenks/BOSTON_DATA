@@ -59,7 +59,7 @@ shinyServer(function(input, output) {
     } else if (input$land_building == 'Both'){
       pickerInput(
         label = "Choose Property Types", inputId = 'prop_types',multiple = TRUE, selected = 'All',
-        choices = c('All','Boston All', 'BPDA All',unique(land_parcels$type, unique(Energy_Parsed_Df$`Property Type`)))
+        choices = c('All','Boston All', 'BPDA All',unique(as.character(land_parcels$type)), unique(as.character(Energy_Parsed_Df$`Property Type`)))
       )
     }
   })
@@ -121,16 +121,16 @@ shinyServer(function(input, output) {
                                        Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
         
         output$energy_requested <- renderInfoBox({
-          infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+          infoBox("Energy Coverage Requested", prettyNum((Total_energy_city_of_boston * (input$city_bost_perc/100)), big.mark = ','), icon = icon("flash"), color = "purple")
           })
         output$produced_by_selection <- renderInfoBox({
-          infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+          infoBox("Energy Produced", prettyNum(sum(calculate_df$Kwh_potential, na.rm = T), big.mark = ','), icon = icon("leaf"), color = "green")
           })
         output$percentage_covered <- renderInfoBox({
-          infoBox("Percent Covered", ((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+          infoBox("Percent Covered", prettyNum(((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), big.mark = ','), icon = icon("signal"), color = "blue")
           })
         output$cost_of_implementation <- renderInfoBox({
-          infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+          infoBox("Cost of Implementation", prettyNum(sum(calculate_df$Cost_of_installation_gross, na.rm = T), big.mark = ','), icon = icon("money"), color = "orange")
           })
         
       } else {
@@ -145,16 +145,16 @@ shinyServer(function(input, output) {
                                         Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
         
         output$energy_requested <- renderInfoBox({
-          infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+          infoBox("Energy Coverage Requested", prettyNum((Total_energy_city_of_boston * (input$city_bost_perc/100)), big.mark = ','), icon = icon("flash"), color = "purple")
         })
         output$produced_by_selection <- renderInfoBox({
-          infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+          infoBox("Energy Produced", prettyNum(sum(calculate_df$Kwh_potential, na.rm = T), big.mark = ','), icon = icon("leaf"), color = "green")
         })
         output$percentage_covered <- renderInfoBox({
-          infoBox("Percent Covered", ((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+          infoBox("Percent Covered", prettyNum(((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), big.mark = ','), icon = icon("signal"), color = "blue")
         })
         output$cost_of_implementation <- renderInfoBox({
-          infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+          infoBox("Cost of Implementation", prettyNum(sum(calculate_df$Cost_of_installation_gross, na.rm = T), big.mark = ','), icon = icon("money"), color = "orange")
         })
         
 
@@ -169,16 +169,16 @@ shinyServer(function(input, output) {
                                        Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
       
       output$energy_requested <- renderInfoBox({
-        infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+        infoBox("Energy Coverage Requested", prettyNum((Total_energy_city_of_boston * (input$city_bost_perc/100)), big.mark = ','), icon = icon("flash"), color = "purple")
       })
       output$produced_by_selection <- renderInfoBox({
-        infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+        infoBox("Energy Produced", prettyNum(sum(calculate_df$Kwh_potential, na.rm = T), big.mark = ','), icon = icon("leaf"), color = "green")
       })
       output$percentage_covered <- renderInfoBox({
-        infoBox("Percent Covered", ((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+        infoBox("Percent Covered", prettyNum(((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), big.mark = ','), icon = icon("signal"), color = "blue")
       })
       output$cost_of_implementation <- renderInfoBox({
-        infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+        infoBox("Cost of Implementation", prettyNum(sum(calculate_df$Cost_of_installation_gross, na.rm = T), big.mark = ','), icon = icon("money"), color = "orange")
       })
       
     } else {
@@ -191,16 +191,16 @@ shinyServer(function(input, output) {
                                        Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
       
       output$energy_requested <- renderInfoBox({
-        infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+        infoBox("Energy Coverage Requested", prettyNum((Total_energy_city_of_boston * (input$city_bost_perc/100)), big.mark = ','), icon = icon("flash"), color = "purple")
       })
       output$produced_by_selection <- renderInfoBox({
-        infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+        infoBox("Energy Produced", prettyNum(sum(calculate_df$Kwh_potential, na.rm = T), big.mark = ','), icon = icon("leaf"), color = "green")
       })
       output$percentage_covered <- renderInfoBox({
-        infoBox("Percent Covered", ((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+        infoBox("Percent Covered", prettyNum(((sum(calculate_df$Kwh_potential, na.rm = T)/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), big.mark = ','), icon = icon("signal"), color = "blue")
       })
       output$cost_of_implementation <- renderInfoBox({
-        infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+        infoBox("Cost of Implementation", prettyNum(sum(calculate_df$Cost_of_installation_gross, na.rm = T), big.mark = ','), icon = icon("money"), color = "orange")
       })
       
     }
@@ -222,16 +222,16 @@ shinyServer(function(input, output) {
                                     Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
        
        output$energy_requested <- renderInfoBox({
-         infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+         infoBox("Energy Coverage Requested", prettyNum((Total_energy_city_of_boston * (input$city_bost_perc/100)), big.mark = ','), icon = icon("flash"), color = "purple")
        })
        output$produced_by_selection <- renderInfoBox({
-         infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+         infoBox("Energy Produced", prettyNum(sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), big.mark = ','), icon = icon("leaf"), color = "green")
        })
        output$percentage_covered <- renderInfoBox({
-         infoBox("Percent Covered", (((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+         infoBox("Percent Covered", prettyNum((((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), big.mark = ','), icon = icon("signal"), color = "blue")
        })
        output$cost_of_implementation <- renderInfoBox({
-         infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+         infoBox("Cost of Implementation", prettyNum((sum(calculate_df$Cost_of_installation_gross, na.rm = T) + sum(bpda_calculate_df$Cost_of_installation_gross, na.rm = T)), big.mark = ','), icon = icon("money"), color = "orange")
        })
        
      } else if ('BPDA All' %in% input$prop_types){
@@ -252,16 +252,16 @@ shinyServer(function(input, output) {
                                     Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
        
        output$energy_requested <- renderInfoBox({
-         infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+         infoBox("Energy Coverage Requested", prettyNum((Total_energy_city_of_boston * (input$city_bost_perc/100)),big.mark = ','), icon = icon("flash"), color = "purple")
        })
        output$produced_by_selection <- renderInfoBox({
-         infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+         infoBox("Energy Produced", prettyNum(sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), big.mark = ','), icon = icon("leaf"), color = "green")
        })
        output$percentage_covered <- renderInfoBox({
-         infoBox("Percent Covered", (((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+         infoBox("Percent Covered", prettyNum((((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), big.mark = ','), icon = icon("signal"), color = "blue")
        })
        output$cost_of_implementation <- renderInfoBox({
-         infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+         infoBox("Cost of Implementation", prettyNum(sum(calculate_df$Cost_of_installation_gross, na.rm = T) + sum(bpda_calculate_df$Cost_of_installation_gross, na.rm = T), big.mark = ','), icon = icon("money"), color = "orange")
        })
        
      } else if ('Boston All' %in% input$prop_types){
@@ -282,16 +282,46 @@ shinyServer(function(input, output) {
                                         Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
        
        output$energy_requested <- renderInfoBox({
-         infoBox("Energy Coverage Requested", (Total_energy_city_of_boston * (input$city_bost_perc/100)), icon = icon("list"), color = "purple")
+         infoBox("Energy Coverage Requested", prettyNum((Total_energy_city_of_boston * (input$city_bost_perc/100)), big.mark = ','), icon = icon("flash"), color = "purple")
        })
        output$produced_by_selection <- renderInfoBox({
-         infoBox("Energy Produced", sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), icon = icon("list"), color = "green")
+         infoBox("Energy Produced", prettyNum(sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), big.mark = ','), icon = icon("leaf"), color = "green")
        })
        output$percentage_covered <- renderInfoBox({
-         infoBox("Percent Covered", (((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), icon = icon("list"), color = "blue")
+         infoBox("Percent Covered", prettyNum((((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), big.mark = ','), icon = icon("signal"), color = "blue")
        })
        output$cost_of_implementation <- renderInfoBox({
-         infoBox("Cost of Implementation", sum(calculate_df$Cost_of_installation_gross, na.rm = T), icon = icon("list"), color = "orange")
+         infoBox("Cost of Implementation", prettyNum(sum(calculate_df$Cost_of_installation_gross, na.rm = T) + sum(bpda_calculate_df$Cost_of_installation_gross, na.rm = T), big.mark = ','), icon = icon("money"), color = "orange")
+       })
+     } else {
+       calculate_df <- Energy_Parsed_Df %>%
+                             dplyr::select(Property_Name, `Property Type`, Address, Total_Site_Energy_Kwh, 
+                                           sqft_available, sunlight_hours) %>%
+                             subset(`Property Type` %in% input$prop_types) %>%
+                             mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                    Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                    Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                    Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+       
+       bpda_calculate_df <- land_parsed_df %>%
+                             dplyr::select(address, neighborhood, type, sunlight_hours, sqft_available) %>%
+                             subset(type %in% input$prop_types) %>%
+                             mutate(Available_sqft_for_panels = sqft_available * (input$perc_roof_used/100),
+                                    Number_of_300watt_Panels = Available_sqft_for_panels / 20.67,
+                                    Kwh_potential = ((Number_of_300watt_Panels * 300)/1000) * sunlight_hours * 0.75,
+                                    Cost_of_installation_gross = Number_of_300watt_Panels * 300 * input$price_p_watt)
+       
+       output$energy_requested <- renderInfoBox({
+         infoBox("Energy Coverage Requested", prettyNum((Total_energy_city_of_boston * (input$city_bost_perc/100)), big.mark = ','), icon = icon("flash"), color = "purple")
+       })
+       output$produced_by_selection <- renderInfoBox({
+         infoBox("Energy Produced", prettyNum(sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T), big.mark = ','), icon = icon("leaf"), color = "green")
+       })
+       output$percentage_covered <- renderInfoBox({
+         infoBox("Percent Covered", prettyNum((((sum(calculate_df$Kwh_potential, na.rm = T) + sum(bpda_calculate_df$Kwh_potential, na.rm = T))/(Total_energy_city_of_boston * (input$city_bost_perc/100)))*100), big.mark = ','), icon = icon("signal"), color = "blue")
+       })
+       output$cost_of_implementation <- renderInfoBox({
+         infoBox("Cost of Implementation", prettyNum(sum(calculate_df$Cost_of_installation_gross, na.rm = T) + sum(bpda_calculate_df$Cost_of_installation_gross, na.rm = T), big.mark = ','), icon = icon("money"), color = "orange")
        })
      }
    }
