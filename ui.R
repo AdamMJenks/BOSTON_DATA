@@ -9,7 +9,7 @@ dashboardPage(skin = "green",
     sidebarMenu(
       menuItem("Home", tabName = "dashboard", icon = icon("home")),
       menuItem("Energy Skyline", tabName = "maps", icon = icon("map")),
-      menuItem("Boston Explorer", tabName = "energy", icon = icon("bolt")),
+      menuItem("Boston Solar Potential", tabName = "energy", icon = icon("bolt")),
       menuItem("Scenario Planner", tabName = "scenario", icon = icon("money"))
     )
   ),
@@ -105,8 +105,8 @@ dashboardPage(skin = "green",
                   numericInput('year', label="Year Built >=", min=min(Energy_Parsed_Df$year_built), max=max(Energy_Parsed_Df$year_built), value = 1900),
                   
                   tabsetPanel(
-                    tabPanel('Table', DT::dataTableOutput('energy_table')),
-                   tabPanel('City Map',leafletOutput("mymap"))
+                    tabPanel('Table', HTML('<br>'), DT::dataTableOutput('energy_table')),
+                    tabPanel('City Map',leafletOutput("mymap"))
                   )
                 ))
               
@@ -134,7 +134,24 @@ dashboardPage(skin = "green",
                 column(width = 4, actionButton("compute_button", "Compute Scenario!"))
               ),
               tabsetPanel(
-                tabPanel('Overview'
+                tabPanel('Overview',
+                         h2('Thank you for trying our scenario analysis tool!'),
+                         HTML('<br>'),
+                         h4('Here is some information that you may find useful. For each scenario you can choose whether to only use
+                            buildings that are listen in Analyze Boston"s BERDO file or you can also include supplemental energy production
+                            from BPDA assets. As well, you can mix and match what property types you want from one or the other.'),
+                         HTML('<br>'),
+                         h4('For additional metrics, you can choose what percentage of each roof that is usable according to Google Sunroof 
+                            can be used for solar.  Think: how much space do we need to remove for people to walk around, etc.  You
+                            also choose how much of energy of Boston you want to try and cover by solar and what the cost-per-watt of 
+                            Solar is for your project!'),
+                         HTML('<br>'),
+                         h4('After you click the "Compute Scenario" button, the results tab will update with how much energy coverage is 
+                            requested (in kilowatt hours), how much energy is produced by the solar scenario selected (in kilowatt hours),
+                            the percentage that solar will cover of the amount requested, and lastly how much it would cost.  The "Scenario
+                            Selected From" tab includes what BERDO file buildings that were selected. If BPDA only is selected, this 
+                            final tab will remain empty as the BPDA parcels are not included in the greater data, only as supplemental solar.'),
+                         h4('ENJOY!')
                          ),
                 tabPanel('Results',
                              infoBoxOutput("energy_requested"),

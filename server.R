@@ -36,14 +36,20 @@ shinyServer(function(input, output) {
   
   output$energy_table <- renderDataTable({
     
-    # generate bins based on input$bins from ui.R
-    the_data <- getData()
+    if(input$type != 'All'){
+      e <- subset(Energy_Parsed_Df, `Property Type` == input$type & year_built >= input$year)
+    } else{
+      e <- subset(Energy_Parsed_Df, year_built >= input$year)
+    }
     
-    the_data <- the_data %>% 
-      datatable() %>%
-      formatRound(columns=c('Kwh_potential', 'Cost_of_installation_gross'), digits=0)
     
-  }, options = list(scrollX = TRUE, order = list(list(4, 'desc'))))
+    e <- e %>% as.data.frame() %>%
+            dplyr::select(Address, Property_Name, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross) %>%
+            mutate(Kwh_potential = as.integer(Kwh_potential), sunlight_hours = as.integer(sunlight_hours), sqft_available = as.integer(sqft_available), Cost_of_installation_gross = prettyNum(Cost_of_installation_gross, big.mark = ','))
+    
+
+    
+  }, options = list(scrollX = TRUE, order = list(list(4, 'desc')), columnDefs = list(list(className = 'dt-center', targets = 0:7))))
   
   output$scenario_lists <- renderUI({
     if(input$land_building == "Boston Buildings"){
