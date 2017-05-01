@@ -16,40 +16,8 @@ dashboardPage(skin = "green",
   ),
   dashboardBody(
     tags$head(
-    tags$link(href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css"),
-    tags$style(HTML('
-      .city_logo {
-        display: block;
-        margin: 0 auto;
-      }
-      .nav_logo {
-	      margin-top: 10px;
-        margin-left: 25px;
-        margin-right: auto;
-      }
-      .title {
-        text-align: center;
-      }
-      .inline-block, .inline-block img {
-        display: inline-block;
-        margin: 0 20px;
-      }
-      #map,
-      .mapboxgl-canvas { 
-        width:100% !important;
-        min-height: 800px;
-      }
-      .mapbox {
-        min-height: 800px;
-        padding: 0;
-      }
-      #prop_types
-      {
-         height: 200px;
-         overflow: auto;
-         width: 200px;
-      }
-    ')),
+    tags$link(href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css", rel="stylesheet"),
+    tags$link(href="main.css", rel="stylesheet"),
     tags$script(src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.js'),      
     tags$script(src='main.js')
     ),

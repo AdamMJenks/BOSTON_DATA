@@ -1,0 +1,31 @@
+.city_logo {
+  display: block;
+  margin: 0 auto;
+}
+.nav_logo {
+  margin-top: 10px;
+  margin-left: 25px;
+  margin-right: auto;
+}
+.title {
+  text-align: center;
+}
+.inline-block, .inline-block img {
+  display: inline-block;
+  margin: 0 20px;
+}
+#map,
+.mapboxgl-canvas { 
+  width:100% !important;
+  min-height: 800px;
+}
+.mapbox {
+  min-height: 800px;
+  padding: 0;
+}
+#prop_types
+{
+   height: 200px;
+   overflow: auto;
+   width: 200px;
+}
