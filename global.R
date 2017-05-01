@@ -47,13 +47,10 @@ Energy_Parsed_Df <-  Energy_Parsed_Df %>%
                      Surplus_energy_production_possible = Kwh_potential - Total_Site_Energy_Kwh_Electricity) %>%
   rename(Property_Name = `Property Name`)
 
-<<<<<<< HEAD
 Energy_Parsed_Df$score <- Energy_Parsed_Df$Cost_of_installation_gross / Energy_Parsed_Df$Kwh_potential
-=======
 Total_energy_city_of_boston <<- sum(Energy_Parsed_Df$Total_Site_Energy_Kwh_Electricity, na.rm = T)
 
->>>>>>> 218b5b081cdb3369ce72b544d6f3c4d24c8a780d
- 
+
 Energy_Surplus_per_property_type <- Energy_Parsed_Df %>% 
   filter(!is.na(Surplus_energy_production_possible)) %>%
   group_by(`Property Type`) %>%
