@@ -5,9 +5,10 @@ window.onload = function () {
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v9',
       center: [-71.057083, 42.361145],
-      zoom: 15.99,
-      pitch: 40,
-      bearing: 20
+      zoom: 14,
+      pitch: 60,
+      bearing: 20,
+      hash: true
   });
 
   map.on('load', function() {
@@ -74,7 +75,7 @@ window.onload = function () {
             .setLngLat(e.lngLat)
             .setHTML(
               '<p>Address: ' + e.features[0].properties.Address + '</p>' + 
-              '<p>Kwh Potential: ' + e.features[0].properties.Property_Type + '</p>' +
+              '<p>Property Type: ' + e.features[0].properties.Property_Type + '</p>' +
               '<p>Kwh Potential: ' + e.features[0].properties.Kwh_potential + '</p>' +
               '<p>Cost of Installation: ' + e.features[0].properties.Cost_of_installation_gross + '</p>' + 
               '<p>Total Site Energy (Kwh): ' + e.features[0].properties.Total_Site_Energy_Kwh + '</p>'

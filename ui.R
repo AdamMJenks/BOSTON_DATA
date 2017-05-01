@@ -75,8 +75,19 @@ dashboardPage(skin = "green",
                     )
                   )
                 )
+              ),
+              fluidRow(
+                box (title = "Legend", width = 12, status = 'success', solidHeader = TRUE,
+
+                    div(
+                        p("The skyline created by this visualization is not the Boston skyline you know."),
+                        p("Instead, the heights of the buildings you see here are determined by how much energy they use: taller buildings use more Kwh of electricity."),
+                        p("The colors of the buildings is a representation of how valuable that site's money could be if invested in solar energy.  For each dollar invested, what percentage of its electricity bill would be covered?  The greener the building, the higher the percentage."),
+                        p("The tallest and greenest buildings stand to benefit the most from an investment in solar power."),
+                        p("This solar skyline may not be what you see when you look out at Boston's buildings - but it will show you who can benefit the most by looking into the sky.")
+                    )
+                )
               )
-              
       ),
       tabItem(tabName = "energy",
               h2("Energy"),
