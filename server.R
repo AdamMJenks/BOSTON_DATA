@@ -37,13 +37,13 @@ shinyServer(function(input, output) {
   output$energy_table <- renderDataTable({
     
     if(input$type != 'All'){
-      e <- subset(Energy_Parsed_Df, `Property Type` == input$type & year_built >= input$year)
+      e <- subset(Energy_Parsed_Df, `Property Type` == input$type & year_built >= input$year & sqft_available >= input$sqft_min & Kwh_potential >= input$kwh_min)
     } else{
-      e <- subset(Energy_Parsed_Df, year_built >= input$year)
+      e <- subset(Energy_Parsed_Df, year_built >= input$year & sqft_available >= input$sqft_min & Kwh_potential >= input$kwh_min)
     }
     
     
-    e <- e %>% as.data.frame() %>%
+    e <<- e %>% as.data.frame() %>%
             dplyr::select(Address, Property_Name, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross) %>%
             mutate(Kwh_potential = as.integer(Kwh_potential), sunlight_hours = as.integer(sunlight_hours), sqft_available = as.integer(sqft_available), Cost_of_installation_gross = prettyNum(Cost_of_installation_gross, big.mark = ','))
     
@@ -87,7 +87,7 @@ shinyServer(function(input, output) {
      #browser()
     
     the_data <- getData()
-     Boston_shape@data = data.frame(Boston_shape@data, the_data[match(Boston_shape@data$Property_Name, the_data$Property_Name),])
+     Boston_shape@data = data.frame(Boston_shape@data, the_data[match(Boston_shape@data$Property_Name, e$Property_Name),])
 
      rbPal <- colorRampPalette(c('green','red'))
      Boston_shape@data$score <- as.numeric(Boston_shape@data$Cost_of_installation_gross) / Boston_shape@data$Kwh_potential

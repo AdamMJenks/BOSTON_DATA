@@ -101,12 +101,19 @@ dashboardPage(skin = "green",
               h2("Energy"),
               fluidRow(
                 box(title = 'Energy', width = 12, status = 'success', solidHeader = TRUE,
-                  selectInput('type', label="Property Type", choices = c('All', sort(unique(Energy_Parsed_Df$`Property Type`)))),
-                  numericInput('year', label="Year Built >=", min=min(Energy_Parsed_Df$year_built), max=max(Energy_Parsed_Df$year_built), value = 1900),
-                  
+                  column(width = 6,
+                    selectInput('type', label="Property Type", choices = c('All', sort(unique(Energy_Parsed_Df$`Property Type`)))),
+                    numericInput('year', label="Year Built >=", min=min(Energy_Parsed_Df$year_built), max=max(Energy_Parsed_Df$year_built), value = 1900)
+                  ),
+                  column(width = 6,
+                    numericInput('sqft_min', label = 'Minimum Sqft.',min=min(Energy_Parsed_Df$sqft_available, na.rm = T), max = max(Energy_Parsed_Df$sqft_available, na.rm = T), value = median(Energy_Parsed_Df$sqft_available)),
+                    numericInput('kwh_min', label = 'Kwh Potential Minimum',min=min(Energy_Parsed_Df$Kwh_potential, na.rm = T), max = max(Energy_Parsed_Df$Kwh_potential, na.rm = T), value = median(Energy_Parsed_Df$Kwh_potential))
+                  ),
+                  box(width = 12,
                   tabsetPanel(
                     tabPanel('Table', HTML('<br>'), DT::dataTableOutput('energy_table')),
                     tabPanel('City Map',leafletOutput("mymap"))
+                  )
                   )
                 ))
               
