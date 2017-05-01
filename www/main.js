@@ -67,6 +67,30 @@ window.onload = function () {
               'fill-extrusion-opacity': 0.5
           }
       });
+      
+      
+      map.on('click', "room-extrusion", function (e) {
+        new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(
+              '<p>Address: ' + e.features[0].properties.Address + '</p>' + 
+              '<p>Kwh Potential: ' + e.features[0].properties.Property_Type + '</p>' +
+              '<p>Kwh Potential: ' + e.features[0].properties.Kwh_potential + '</p>' +
+              '<p>Cost of Installation: ' + e.features[0].properties.Cost_of_installation_gross + '</p>' + 
+              '<p>Total Site Energy (Kwh): ' + e.features[0].properties.Total_Site_Energy_Kwh + '</p>'
+            )
+            .addTo(map);
+      });
+
+      // Change the cursor to a pointer when the mouse is over the states layer.
+      map.on('mouseenter', 'room-extrusion', function () {
+          map.getCanvas().style.cursor = 'pointer';
+      });
+
+      // Change it back to a pointer when it leaves.
+      map.on('mouseleave', 'room-extrusion', function () {
+          map.getCanvas().style.cursor = '';
+      });
   });
   
   // Add zoom and rotation controls to the map.
