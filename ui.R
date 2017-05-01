@@ -53,6 +53,7 @@ dashboardPage(skin = "green",
               fluidRow(
                 box(width = 12,
                     img(src = 'img/boston.svg', height = 200, width = 200, class="logo"),
+                    img(src = 'img/logo.png', height = 200, width = 200, style="background-color: #5cb85c; padding: 30px;" class="logo"),
                     h1("Analyze Boston", class="title"),
                     h2("Project: Track 1"),
                     p("Reducing Boston’s Carbon Footprint: Participants will use the Boston Energy Reporting and Disclosure Ordinance (BERDO), City of Boston Utility Billing Data, City of Boston Real-Time Energy Metering (coming soon!), and other relevant datasets from Analyze Boston to find new ways to promote energy efficiency and reduce greenhouse gas emissions in Boston. You might (for example) analyze the efficiency of individual buildings relative to their characteristics and usage, develop a new map to highlight Boston's greenest buildings, or create graphs of usage over time to see how Boston's demand for energy is evolving over time."),
