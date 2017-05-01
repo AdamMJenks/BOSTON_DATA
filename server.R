@@ -87,17 +87,17 @@ shinyServer(function(input, output) {
   output$mymap <- renderLeaflet({
     
     #browser()
-    #the_data <- getData()
+    the_data <- getData()
     Boston_shape@data = data.frame(Boston_shape@data, the_data[match(Boston_shape@data$Property_Name, e$Property_Name),])
-    # rbPal <- colorRampPalette(c('green','red'))
+    #rbPal <- colorRampPalette(c('green','red'))
     # Boston_shape@data$score <- log(as.numeric(Boston_shape@data$Cost_of_installation_gross) / ((Boston_shape@data$Kwh_potential/Boston_shape@data$Total_Site_Energy_Kwh)* 100))
     # Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
     # Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
     # 
     # ## Remove some outliers
-    # Boston_shape@data$score [which(Boston_shape@data$score > 10)] <- NA
+    # Boston_shape@data$score [which(Boston_shape@data$score == 0)] <- NA
     # Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
-    # Boston_shape@data$height <-rescale(log(Boston_shape@data$Total_Site_Energy_Kwh), c(0,400))
+    # Boston_shape@data$height <-rescale(log(Boston_shape@data$Total_Site_Energy_Kwh), c(0,300))
     # Boston_shape@data$color <- rbPal(10)[cut(as.numeric(Boston_shape@data$score),breaks = 10)]
     Boston_shape <- sp.na.omit(Boston_shape, 'Kwh_potential')
 
