@@ -29,3 +29,32 @@
    overflow: auto;
    width: 200px;
 }
+
+.solarLegend {
+  position: absolute;
+  top: 50px;
+  left: 20px;
+}
+
+.solarScale {
+	position: relative;
+	height: 200px;
+	width: 20px;
+	background: green; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(green, red); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(green, red); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(green, red); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(green, red); /* Standard syntax */
+} 
+
+.solarhigh {
+	position: absolute;
+	top: 0;
+	left: 25px;
+}
+
+.solarlow {
+	position: absolute;
+	bottom: 0;
+	left: 25px;
+}
