@@ -4,9 +4,10 @@ library(shinydashboard)
 library(shinyWidgets)
 
 dashboardPage(skin = "green",
-  dashboardHeader(title = "Analyze Boston"),
+  dashboardHeader(title = "Boston Solar"),
   dashboardSidebar(
     sidebarMenu(
+      a(img(src="img/logo.png", align="center", width="170px", class="nav_logo"), href="http://tcbanalytics.com", target="_blank"),
       menuItem("Home", tabName = "dashboard", icon = icon("home")),
       menuItem("Energy Skyline", tabName = "maps", icon = icon("map")),
       menuItem("Boston Solar Potential", tabName = "energy", icon = icon("bolt")),
@@ -17,9 +18,14 @@ dashboardPage(skin = "green",
     tags$head(
     tags$link(href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.36.0/mapbox-gl.css"),
     tags$style(HTML('
-      .logo {
+      .city_logo {
         display: block;
         margin: 0 auto;
+      }
+      .nav_logo {
+	      margin-top: 10px;
+        margin-left: 25px;
+        margin-right: auto;
       }
       .title {
         text-align: center;
@@ -52,9 +58,9 @@ dashboardPage(skin = "green",
       tabItem(tabName = "dashboard",
               fluidRow(
                 box(width = 12,
-                    img(src = 'img/boston.svg', height = 200, width = 200, class="logo"),
-                    img(src = 'img/logo.png', height = 200, width = 200, style="background-color: #5cb85c; padding: 30px;" class="logo"),
-                    h1("Analyze Boston", class="title"),
+                    img(src = 'img/boston.svg', height = 200, width = 200, class="city_logo"),
+                    #img(src = 'img/logo.png', height = 200, width = 200, style="background-color: #5cb85c; padding: 30px;", class="logo"),
+                    h1("Beantown Solar: The Future Never Looked So Bright", class="title"),
                     h2("Project: Track 1"),
                     p("Reducing Boston’s Carbon Footprint: Participants will use the Boston Energy Reporting and Disclosure Ordinance (BERDO), City of Boston Utility Billing Data, City of Boston Real-Time Energy Metering (coming soon!), and other relevant datasets from Analyze Boston to find new ways to promote energy efficiency and reduce greenhouse gas emissions in Boston. You might (for example) analyze the efficiency of individual buildings relative to their characteristics and usage, develop a new map to highlight Boston's greenest buildings, or create graphs of usage over time to see how Boston's demand for energy is evolving over time."),
                     h2("Team:"),
