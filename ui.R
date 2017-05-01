@@ -80,7 +80,10 @@ dashboardPage(skin = "green",
                       )
                     ),
                     h2("Description:"),
-                    p("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.")
+                    p("For this track, our team decided to help the City of Boston and others begin to comprehend the extent to which we can leverage
+                      the square footage available on top of our buildings to offset our energy usage via solar power. Utilizing the BERDO and BPDA 
+                      asset from Boston, along with Google Sunroof, we have produced advanced visualizations of Boston and a scenario planner
+                      for future planning usage.")
                 )
               )
       ),
