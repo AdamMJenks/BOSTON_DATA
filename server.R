@@ -34,6 +34,7 @@ shinyServer(function(input, output) {
     return(e)
   })
   
+  
   output$energy_table <- renderDataTable({
     
     if(input$type != 'All'){
@@ -45,7 +46,8 @@ shinyServer(function(input, output) {
     
     e <<- e %>% as.data.frame() %>%
             dplyr::select(Address, Property_Name, `Property Type`, year_built, Kwh_potential, sunlight_hours, sqft_available, Cost_of_installation_gross) %>%
-            mutate(Kwh_potential = as.integer(Kwh_potential), sunlight_hours = as.integer(sunlight_hours), sqft_available = as.integer(sqft_available), Cost_of_installation_gross = prettyNum(Cost_of_installation_gross, big.mark = ','))
+            mutate(Kwh_potential = as.integer(Kwh_potential), sunlight_hours = as.integer(sunlight_hours), sqft_available = as.integer(sqft_available), Cost_of_installation_gross = prettyNum(Cost_of_installation_gross, big.mark = ',')) %>%
+            rename(`Kwh Potential` = Kwh_potential, `Yr. Hours Sunlight` = sunlight_hours, `Roof sqft Exponsed` = sqft_available, `Solar Cost` = Cost_of_installation_gross)
     
 
     
@@ -89,15 +91,15 @@ shinyServer(function(input, output) {
     the_data <- getData()
      Boston_shape@data = data.frame(Boston_shape@data, the_data[match(Boston_shape@data$Property_Name, e$Property_Name),])
 
-     rbPal <- colorRampPalette(c('green','red'))
-     Boston_shape@data$score <- as.numeric(Boston_shape@data$Cost_of_installation_gross) / Boston_shape@data$Kwh_potential
-     Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
-     Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
-     ## Remove some outliers
-     Boston_shape@data$score [which(Boston_shape@data$score > 30)] <- NA
-     Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
-     Boston_shape@data$height <-Boston_shape@data$score
-     Boston_shape@data$color <- rbPal(10)[cut(as.numeric(Boston_shape@data$score),breaks = 10)]
+     # rbPal <- colorRampPalette(c('green','red'))
+     # Boston_shape@data$score <- as.numeric(Boston_shape@data$Cost_of_installation_gross) / Boston_shape@data$Kwh_potential
+     # Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
+     # Boston_shape@data <- subset(Boston_shape@data, select=-c(Pct_Gas, Pct_Electricity, Pct_Steam))
+     # ## Remove some outliers
+     # Boston_shape@data$score [which(Boston_shape@data$score > 30)] <- NA
+     # Boston_shape@data$score <- rescale(Boston_shape@data$score, c(0, 100))
+     # Boston_shape@data$height <-Boston_shape@data$score
+     # Boston_shape@data$color <- rbPal(10)[cut(as.numeric(Boston_shape@data$score),breaks = 10)]
 
      Boston_shape <- sp.na.omit(Boston_shape, 'Kwh_potential')
 
