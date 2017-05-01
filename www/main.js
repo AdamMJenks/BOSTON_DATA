@@ -72,6 +72,16 @@ window.onload = function () {
   // Add zoom and rotation controls to the map.
   map.addControl(new mapboxgl.NavigationControl());
   map.addControl(new mapboxgl.FullscreenControl());
+  
+  // this is a hack to resize the map on mousenter, only once
+  var haveResized = false;
+  map.on('mouseenter', 'room-extrusion', function(e) {
+      if (!haveResized) {
+        map.resize();               
+        haveResized = true;
+        console.log('initial resize');
+      }
+  });
    
    
   function resize(){    
