@@ -21,4 +21,4 @@ the_df <- data.frame(address = as.character(addresses_text), neighborhood = as.c
 
 the_df$sqft <- as.numeric(gsub("\n|,|sq\\.ft", "", as.character(the_df$sqft)))
 
-write.csv(the_df, file="Data/land_parcels.csv", row.names = FALSE)
+write.csv(the_df, file="data/land_parcels.csv", row.names = FALSE)
