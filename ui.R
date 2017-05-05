@@ -11,7 +11,8 @@ dashboardPage(skin = "green",
       menuItem("Home", tabName = "dashboard", icon = icon("home")),
       menuItem("Energy Skyline", tabName = "maps", icon = icon("map")),
       menuItem("Boston Solar Potential", tabName = "energy", icon = icon("bolt")),
-      menuItem("Scenario Planner", tabName = "scenario", icon = icon("money"))
+      menuItem("Scenario Planner", tabName = "scenario", icon = icon("money")),
+      menuItem("About", tabName='about', icon=icon("question"))
     )
   ),
   dashboardBody(
@@ -162,8 +163,18 @@ dashboardPage(skin = "green",
               )
             )
           )
-        )
+        ),
+      tabItem(tabName = "about",
+              fluidRow(
+                box (title = 'About', width = 12, status = 'success', solidHeader = TRUE,
+                     p("This application uses data from the following sources:"),
+                     HTML("<ul><li><a href = 'https://data.boston.gov/dataset/building-energy-reporting-and-disclosure-ordinance'>Building Energy Reporting And Disclosure Ordinance (BERDO)</a></li>
+                          <li><a href = 'https://www.google.com/get/sunroof'>Google Project Sunroof</a></li>
+                          <li><a href = 'http://www.bostonplans.org/work-with-us/bpda-owned-land?viewall=1'>Boston Planning and Development Agency</a></li></ul>")
+                )
+              )
       )
     )
   )
+)
   
